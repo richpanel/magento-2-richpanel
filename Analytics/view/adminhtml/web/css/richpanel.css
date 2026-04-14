@@ -1,0 +1,38 @@
+/**
+ * Copyright © 2016 Richpanel. All rights reserved.
+ */
+
+#analytics_general .richpanel-logo {
+    background: url('../images/favicon-richpanel.png');
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
+    line-height:36px;
+    float: left;
+    margin-right: 10px;
+}
+#richpanel-info {
+    float:left;
+    width: calc(100% - 20px);
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 7px;
+}
+#richpanel-info a {
+    color:#378FE2!important;
+    margin: 0;
+}
+#richpanel-info .text {
+    float:left;
+    padding-top: 5px;
+}
+#richpanel_import_status {
+    font-weight: bold;
+    vertical-align: middle;
+    display: flex;
+    padding: 10px 0;
+}
+#richpanel_import_status img {
+    margin-right: 5px;
+}

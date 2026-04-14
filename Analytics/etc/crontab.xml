@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+	<group id="default">
+		<job instance="Richpanel\Analytics\Cron\OrderUpdateCheck" method="execute" name="richpanel_analytics_cron">
+			<schedule>*/1 * * * *</schedule>
+		</job>
+		<job instance="Richpanel\Analytics\Cron\OrderUpdateCheck" method="executeDaily" name="richpanel_analytics_cron_daily">
+			<schedule>0 3 * * *</schedule>
+		</job>
+	</group>
+</config>

@@ -1,0 +1,62 @@
+<?php
+/**
+ * @see Richpanel\Analytics\Block\Analytics
+ */
+
+/** @var Richpanel\Analytics\Block\Analytics $events */
+$events = $block->getEvents();
+$js_domain = $block->helper->js_domain;
+$api_token = $block->getApiToken();
+?>
+<script type="text/javascript">
+
+    let js_domain = "<?php echo $js_domain; ?>"
+    let api_token = "<?php echo $api_token; ?>"
+
+    window.richpanel||(window.richpanel=[]),window.richpanel.queue=[],window.richpanel.methods=["track","debug","atr"],
+    window.richpanel.skelet=function(e){return function(){a=Array.prototype.slice.call(arguments);a.unshift(e);window.richpanel.queue.push(a)}};
+    for(var i=0;window.richpanel.methods.length>i;i++){var mthd=window.richpanel.methods[i];window.richpanel[mthd]=window.richpanel.skelet(mthd)}
+
+    function loadRichpanel() {
+        try {
+            if (typeof require === "function") {
+                require(["//cdn.richpanel.com/js/richpanel-root.js?appClientId="+api_token]);
+            } else {
+                window.richpanel.load=function(e){var t=document,n=t.getElementsByTagName("script")[0],r=t.createElement("script");
+                r.type="text/javascript";r.async=true;r.src="//cdn.richpanel.com/js/richpanel-root.js";n.parentNode.insertBefore(r,n)};
+                richpanel.load(api_token);
+            }
+        } catch (error) {
+            console.error('Error loading richpanel', error);
+        }
+    }
+
+    function checkRichpanel() {
+        if (window.richpanel && window.richpanel.track) {
+            <?php foreach ($events as $event) : ?>
+                <?php if (isset($event['type']) && isset($event['method'])): ?>
+                    <?php if($event['method'] == 'identify') : ?>
+                        richpanel.track("<?php echo $event['type']; ?>", null, <?php echo isset($event['userProperties']) ? 
+                        json_encode($event['userProperties']) : 'null'; ?>);
+                    <?php else: ?>
+                        richpanel.track("<?php echo $event['type']; ?>", <?php echo isset($event['properties']) ? 
+                        json_encode($event['properties']) : 'null'; ?>);
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        } else {
+            // richpanel is not loaded yet
+            setTimeout(checkRichpanel, 100);
+        }
+    }
+
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadRichpanel);
+        window.requestIdleCallback(checkRichpanel);
+    } else {
+        window.addEventListener('load', function() {
+            loadRichpanel();
+            checkRichpanel();
+        });
+    }
+</script>

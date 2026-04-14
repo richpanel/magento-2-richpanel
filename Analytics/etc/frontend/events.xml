@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Register frontend events
+ *
+ * @author Shubhanshu Chouhan <shubhanshu@richpanel.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_login">
+        <observer name="richpanel_event_login" instance="Richpanel\Analytics\Observer\CustomerLogin" />
+    </event>
+    <event name="customer_account_edited">
+    	<observer name="richpanel_event_account_update" instance="Richpanel\Analytics\Observer\CustomerUpdate" />
+    </event>
+    <event name="checkout_cart_product_add_after">
+        <observer name="richpanel_event_addtocart" instance="Richpanel\Analytics\Observer\AddToCart" />
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="richpanel_event_removefromcart" instance="Richpanel\Analytics\Observer\RemoveFromCart" />
+    </event>
+</config>
