@@ -5,7 +5,6 @@
 
 namespace Richpanel\Analytics\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
@@ -52,18 +51,26 @@ class Import
     private AdminStoreResolver $resolver;
 
     /**
+     * @var ResourceConnection
+     */
+    private ResourceConnection $resourceConnection;
+
+    /**
      * @param CollectionFactory $orderCollection
      * @param AdminStoreResolver $resolver
      * @param Data $data
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         CollectionFactory $orderCollection,
         AdminStoreResolver $resolver,
-        Data $data
+        Data $data,
+        ResourceConnection $resourceConnection
     ) {
         $this->orderCollection = $orderCollection;
         $this->resolver = $resolver;
         $this->data = $data;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -224,10 +231,8 @@ class Import
     {
         $this->log('Calling getLastRunTime');
         try {
-            $objectManager = ObjectManager::getInstance();
-            $resource = $objectManager->get(ResourceConnection::class);
-            $connection = $resource->getConnection();
-            $tableName = $resource->getTableName('richpanel_data');
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName('richpanel_data');
             
             if (!$connection->isTableExists($tableName)) {
                 return null;
@@ -268,10 +273,8 @@ class Import
                 throw new LocalizedException(__('Invalid time format provided'));
             }
 
-            $objectManager = ObjectManager::getInstance();
-            $resource = $objectManager->get(ResourceConnection::class);
-            $connection = $resource->getConnection();
-            $tableName = $resource->getTableName('richpanel_data');
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName('richpanel_data');
 
             if (!$connection->isTableExists($tableName)) {
                 if (!$createNew) {

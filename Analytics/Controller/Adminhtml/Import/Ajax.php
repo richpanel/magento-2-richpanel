@@ -52,30 +52,18 @@ class Ajax extends Action
      */
     public function execute(): Json
     {
+        $jsonFactory = $this->resultJsonFactory->create();
         try {
-            $jsonFactory = $this->resultJsonFactory->create();
-            $result = ['success' => false];
-
             $storeId = (int)$this->request->getParam('storeId');
             $chunkId = (int)$this->request->getParam('chunkId');
             $duration = $this->request->getParam('duration') ?: '';
-            // $totalChunks = (int)$this->request->getParam('totalChunks');
-
-            // if ($chunkId == 0) {
-            //     $this->helper->createActivity($storeId, 'import_start');
-            // }
 
             // Get orders from the Database
             $orders = $this->import->getOrders($storeId, $chunkId, $duration, FALSE);
             // Send orders via API helper method
             $this->helper->callBatchApi($storeId, $orders, false);
-            $result['success'] = true;
 
-            // if ($chunkId == $totalChunks - 1) {
-            //     $this->helper->createActivity($storeId, 'import_end');
-            // }
-
-            return $jsonFactory->setData($result);
+            return $jsonFactory->setData(['success' => true]);
         } catch (Exception $e) {
             return $jsonFactory->setData([
                 'success' => false,

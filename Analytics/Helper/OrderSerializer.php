@@ -304,11 +304,8 @@ class OrderSerializer extends AbstractHelper
     
             $carrier = 'fedex';
             return $carrier;
-        } else if (0){
-            $carrier = 'dhl';
-            return $carrier;
-        } 
-    
+        }
+
         return;
     
     }

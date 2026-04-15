@@ -5,8 +5,6 @@ namespace Richpanel\Analytics\Cron;
 use Magento\Store\Model\StoreManagerInterface;
 use Richpanel\Analytics\Helper\Data;
 use Richpanel\Analytics\Model\Import;
-use Zend_Log;
-use Zend_Log_Writer_Stream;
 use Exception;
 
 class OrderUpdateCheck
@@ -72,11 +70,7 @@ class OrderUpdateCheck
     public function sync(string $duration): self
     {
         try {
-            $writer = new Zend_Log_Writer_Stream(BP . '/var/log/cron.log');
-            $logger = new Zend_Log();
-            $logger->addWriter($writer);
-
-            $logger->info(__METHOD__);
+            $this->cronLog(__METHOD__);
 
             $storeManagerDataList = $this->storeManager->getStores();
             if (empty($storeManagerDataList)) {
@@ -113,10 +107,21 @@ class OrderUpdateCheck
 
            $this->import->updateLastRunTime($dateMinusDurationForUpdate, $isNew);
         } catch (Exception $e) {
-            if (isset($logger)) {
-                $logger->err($e->getMessage());
-            }
+            $this->cronLog('ERROR: ' . $e->getMessage());
         }
         return $this;
+    }
+
+    /**
+     * Append a line to var/log/cron.log (same destination as the previous Zend_Log writer).
+     */
+    private function cronLog(string $message): void
+    {
+        try {
+            $line = date('Y-m-d\TH:i:sP') . ' INFO (6): ' . $message . PHP_EOL;
+            @file_put_contents(BP . '/var/log/cron.log', $line, FILE_APPEND);
+        } catch (Exception $e) {
+            // swallow
+        }
     }
 }

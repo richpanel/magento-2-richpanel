@@ -109,9 +109,7 @@ class Data extends AbstractHelper
      * @param \Magento\Framework\Module\ModuleListInterface      $moduleList
      */
     public function __construct(
-        // \Magento\Framework\App\Config\ScopeConfigInterface $config,
         Session $session,
-        // \Psr\Log\LoggerInterface $logger,
         JsonHelper $jsonHelper,
         Client $clientHelper,
         OrderSerializer $orderSerializer,
@@ -125,12 +123,8 @@ class Data extends AbstractHelper
         Context $context,
         Session $customerSession,
         HttpContext $authContext
-        // \Magento\Customer\Api\CustomerRepositoryInterfaceFactory $customerRepositoryFactory
-        // \Magento\Framework\ObjectManagerInterface $objectmanager
     ) {
-        // $this->config = $config;
         $this->session = $session;
-        // $this->logger = $logger;
         $this->jsonHelper = $jsonHelper;
         $this->clientHelper = $clientHelper;
         $this->orderSerializer = $orderSerializer;
@@ -138,15 +132,12 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->metaData = $metaData;
         $this->moduleList = $moduleList;
-        // $this->objectManager = $objectmanager;
         $this->_customerFactory = $customerFactory;
-        // $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
-        // $this->_customerSession = $customerSession->create();
         $this->_customerSession = $customerSession;
         $this->authContext = $authContext;
         $this->customerSessionFactory = $customerSessionFactory->create();
-        parent::__construct($context);   
+        parent::__construct($context);
     }
 
     /**
@@ -473,43 +464,11 @@ class Data extends AbstractHelper
     public function log($value)
     {
         try {
-            $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/richpanel.log');
-            $logger = new \Zend_Log();
-            $logger->addWriter($writer);
-    
-            // if ($isError) {
-            //     $logger->error($value);
-            // } else {
-            // }
-            $logger->info($value);
+            $line = date('Y-m-d\TH:i:sP') . ' INFO (6): ' . (is_string($value) ? $value : var_export($value, true)) . PHP_EOL;
+            @file_put_contents(BP . '/var/log/richpanel.log', $line, FILE_APPEND);
         } catch (\Exception $e) {
-            $this->logError($e);
+            // swallow — logging must never break request flow
         }
-    }
-
-    /**
-     * Creates project activity
-     *
-     * @param string $type The type of the activity to create
-     *
-     * @return boolean Indicates if the creation was successful
-     */
-    public function createActivity($storeId, $type)
-    {
-        $key = $this->getApiToken($storeId);
-        $secret = $this->getApiSecret($storeId);
-
-        $data = array(
-            'type' => $type,
-            'signature' => hash('sha256', $key . $type . $secret) //md5($key . $type . $secret)
-        );
-
-        // $url = $this->push_domain.'/tracking/' . $key . '/activity';
-
-        // $responseCode = $this->clientHelper->post($url, $data)['code'];
-        $responseCode = 200;
-
-        return $responseCode == 200;
     }
 
     /**
