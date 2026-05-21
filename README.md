@@ -30,8 +30,24 @@ Magento 2 module that integrates your store with [Richpanel](https://richpanel.c
 
 ### Via composer (recommended)
 
+This package is served directly from GitHub (not Packagist), so first register the
+repository in your Magento project's `composer.json`:
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/ebanolopes/magento-2-richpanel"
+    }
+  ]
+}
+```
+
+Then require it (pick the version constraint that matches a published Git tag):
+
 ```bash
-composer require richpanel/analytics-magento2-extension
+composer require richpanel/analytics-magento2-extension:^3.1
 bin/magento module:enable Richpanel_Analytics
 bin/magento setup:upgrade
 bin/magento setup:di:compile
