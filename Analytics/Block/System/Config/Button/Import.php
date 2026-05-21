@@ -66,7 +66,7 @@ class Import extends Field
      */
     protected function _prepareLayout(): Import
     {
-        if (version_compare($this->getMagentoVersion(), '2.4.7', '>=')) {
+        if (version_compare($this->getMagentoVersion(), '2.4.6', '>=')) {
             $this->setTemplate('Richpanel_Analytics::system/config/button/import.phtml');
         } else {
             parent::_prepareLayout();
