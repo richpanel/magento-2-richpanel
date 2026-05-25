@@ -1,0 +1,22 @@
+{
+  "name": "richpanel/analytics-magento2-extension",
+  "description": "Richpanel Helpdesk & Support platform — Magento 2 extension",
+  "type": "magento2-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "~7.4.0||~8.0.0||~8.1.0||~8.2.0||~8.3.0",
+    "magento/framework": ">=102.0.0 <104.0.0"
+  },
+  "autoload": {
+    "files": [
+      "Analytics/registration.php"
+    ],
+    "psr-4": {
+      "Richpanel\\Analytics\\": "Analytics/"
+    }
+  }
+}
