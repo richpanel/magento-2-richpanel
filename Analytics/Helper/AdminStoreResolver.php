@@ -2,17 +2,14 @@
 
 namespace Richpanel\Analytics\Helper;
 
-class AdminStoreResolver extends \Magento\Framework\App\Helper\AbstractHelper
-{
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $request;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 
-    public function __construct(
-        \Magento\Framework\App\Request\Http $request
-    ) {
-        $this->request = $request;
+class AdminStoreResolver extends AbstractHelper
+{
+    public function __construct(Context $context)
+    {
+        parent::__construct($context);
     }
 
     /**
@@ -22,6 +19,6 @@ class AdminStoreResolver extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAdminStoreId()
     {
-        return (int) $this->request->getParam('store', 0);
+        return (int) $this->_getRequest()->getParam('store', 0);
     }
 }
